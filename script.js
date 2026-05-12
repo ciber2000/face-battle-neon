@@ -3,7 +3,11 @@ const canvas1 = document.getElementById("canvas1");
 
 const scanBtn = document.getElementById("scanBtn");
 const statusText = document.getElementById("status");
+const score1Text =
+document.getElementById("score1");
 
+const score2Text =
+document.getElementById("score2");
 const ctx1 = canvas1.getContext("2d");
 
 canvas1.width = 360;
@@ -121,8 +125,8 @@ scanBtn.addEventListener("click", () => {
 
         if (!faceMeshResults || faceMeshResults.length === 0) {
 
-            statusText.innerText =
-            "ПОДНЕСИ ЛИЦО К КАМЕРЕ";
+            score1Text.innerText =
+"SCORE: 0";
 
             return;
 
