@@ -175,15 +175,8 @@ if(ratio > 0.75 && ratio < 0.95){
 
 }
 
-score = Math.floor(score);
-
-if(score > 100) score = 100;
-if(score < 1) score = 1;
-
-        statusText.innerText =
-        `AI ANALYSIS COMPLETE
-
-ПРИВЛЕКАТЕЛЬНОСТЬ: ${score}%`;
+score1Text.innerText =
+`SCORE: ${score}`;
 
     }, 2000);
 
