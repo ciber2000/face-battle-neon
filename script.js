@@ -87,15 +87,7 @@ const height =
 (landmarks[152].y - landmarks[10].y)
 * canvas1.height;
 
-ctx1.strokeStyle = "red";
 
-ctx1.lineWidth = 3;
-
-ctx1.shadowColor = "red";
-
-ctx1.shadowBlur = 20;
-
-ctx1.strokeRect(x, y, width, height);
         }
 
     }
