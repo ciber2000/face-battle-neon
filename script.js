@@ -28,59 +28,45 @@ async function startCam(video){
 startCam(video1);
 startCam(video2);
 
-async function loadModels(){
+scanBtn.addEventListener("click", ()=>{
 
-    await faceapi.nets.tinyFaceDetector.loadFromUri(
-        "https://cdn.jsdelivr.net/npm/face-api.js/weights"
-    );
+    statusText.innerText = "SCANNING FACE...";
 
-}
+    let progress = 0;
 
-loadModels();
+    const scanInterval = setInterval(()=>{
 
-scanBtn.addEventListener("click", async ()=>{
-
-    statusText.innerText = "SCANNING FACES...";
-
-    const face1 = await faceapi.detectSingleFace(
-        video1,
-        new faceapi.TinyFaceDetectorOptions()
-    );
-
-    const face2 = await faceapi.detectSingleFace(
-        video2,
-        new faceapi.TinyFaceDetectorOptions()
-    );
-
-    if(!face1 || !face2){
+        progress += 10;
 
         statusText.innerText =
-        "FACE NOT DETECTED";
+        `AI SCANNING... ${progress}%`;
 
-        return;
+        if(progress >= 100){
 
-    }
+            clearInterval(scanInterval);
 
-    statusText.innerText =
-    "ANALYZING FACE STRUCTURE...";
+            const p1 = Math.floor(Math.random()*100);
+            const p2 = Math.floor(Math.random()*100);
 
-    setTimeout(()=>{
+            if(p1 > p2){
 
-        const score1 = Math.floor(Math.random()*100);
-        const score2 = Math.floor(Math.random()*100);
+                statusText.innerText =
+                `WINNER: PLAYER 1\n${p1}% VS ${p2}%`;
 
-        if(score1 > score2){
+            }else if(p2 > p1){
 
-            statusText.innerText =
-            `WINNER: PLAYER 1\n${score1}% VS ${score2}%`;
+                statusText.innerText =
+                `WINNER: PLAYER 2\n${p2}% VS ${p1}%`;
 
-        }else{
+            }else{
 
-            statusText.innerText =
-            `WINNER: PLAYER 2\n${score2}% VS ${score1}%`;
+                statusText.innerText =
+                `DRAW\n${p1}% VS ${p2}%`;
+
+            }
 
         }
 
-    },2000);
+    },300);
 
 });
