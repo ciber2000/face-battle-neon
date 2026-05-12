@@ -90,3 +90,11 @@ const camera = new Camera(video1, {
 });
 
 camera.start();
+const scanBtn = document.getElementById("scanBtn");
+const statusText = document.getElementById("status");
+
+scanBtn.addEventListener("click", ()=>{
+
+    statusText.innerText = "AI FACE DETECTED";
+
+});
