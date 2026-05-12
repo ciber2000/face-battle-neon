@@ -1,0 +1,105 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#050510;
+font-family:Arial;
+color:white;
+text-align:center;
+overflow-x:hidden;
+min-height:100vh;
+}
+
+.bg{
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top left, rgba(0,255,255,.15), transparent 40%),
+radial-gradient(circle at bottom right, rgba(255,0,255,.15), transparent 40%);
+z-index:-1;
+}
+
+header{
+padding-top:40px;
+}
+
+h1{
+font-size:70px;
+color:cyan;
+text-shadow:0 0 20px cyan;
+}
+
+header p{
+margin-top:10px;
+color:#bbb;
+letter-spacing:4px;
+}
+
+.arena{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:40px;
+margin-top:60px;
+flex-wrap:wrap;
+}
+
+.player{
+background:rgba(255,255,255,.05);
+padding:20px;
+border-radius:25px;
+box-shadow:0 0 25px rgba(0,255,255,.3);
+backdrop-filter:blur(10px);
+}
+
+.player h2{
+margin-top:15px;
+}
+
+video{
+width:360px;
+height:260px;
+object-fit:cover;
+border-radius:20px;
+background:black;
+}
+
+.vs{
+font-size:80px;
+color:magenta;
+text-shadow:0 0 25px magenta;
+font-weight:bold;
+}
+
+button{
+margin-top:50px;
+padding:18px 40px;
+font-size:24px;
+font-weight:bold;
+border:none;
+border-radius:16px;
+background:linear-gradient(90deg, cyan, magenta);
+color:white;
+cursor:pointer;
+box-shadow:0 0 25px cyan;
+transition:.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+.scan-box{
+margin-top:50px;
+padding-bottom:80px;
+}
+
+#status{
+font-size:42px;
+color:#00ff88;
+text-shadow:0 0 20px #00ff88;
+white-space:pre-line;
+}

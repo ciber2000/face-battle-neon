@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FaceBattleNeon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg"></div>
+
+<header>
+    <h1>FACE BATTLE NEON</h1>
+    <p>AI FACE ANALYZER</p>
+</header>
+
+<div class="arena">
+
+    <div class="player">
+        <video id="video1" autoplay muted playsinline></video>
+        <h2>PLAYER 1</h2>
+    </div>
+
+    <div class="vs">VS</div>
+
+    <div class="player">
+        <video id="video2" autoplay muted playsinline></video>
+        <h2>PLAYER 2</h2>
+    </div>
+
+</div>
+
+<button id="scanBtn">START AI SCAN</button>
+
+<div class="scan-box">
+    <h2 id="status">WAITING...</h2>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
