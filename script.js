@@ -1,21 +1,36 @@
 const video1 = document.getElementById("video1");
 const canvas1 = document.getElementById("canvas1");
 
+const scanBtn = document.getElementById("scanBtn");
+const statusText = document.getElementById("status");
+
 const ctx1 = canvas1.getContext("2d");
 
-async function startCam(){
+canvas1.width = 360;
+canvas1.height = 260;
 
-    const stream = await navigator.mediaDevices.getUserMedia({
+async function startCamera() {
 
-        video:true
+    try {
 
-    });
+        const stream = await navigator.mediaDevices.getUserMedia({
 
-    video1.srcObject = stream;
+            video: true,
+            audio: false
+
+        });
+
+        video1.srcObject = stream;
+
+    } catch (err) {
+
+        alert("Camera access denied");
+
+    }
 
 }
 
-startCam();
+startCamera();
 
 const faceMesh = new FaceMesh({
 
@@ -29,38 +44,34 @@ const faceMesh = new FaceMesh({
 
 faceMesh.setOptions({
 
-    maxNumFaces:1,
+    maxNumFaces: 1,
 
-    refineLandmarks:true,
+    refineLandmarks: true,
 
-    minDetectionConfidence:0.5,
+    minDetectionConfidence: 0.5,
 
-    minTrackingConfidence:0.5
+    minTrackingConfidence: 0.5
 
 });
 
-faceMesh.onResults(onResults);
+faceMesh.onResults(results => {
 
-function onResults(results){
+    ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
 
-    ctx1.clearRect(0,0,canvas1.width,canvas1.height);
+    if (results.multiFaceLandmarks) {
 
-    if(results.multiFaceLandmarks){
-
-        for(const landmarks of results.multiFaceLandmarks){
+        for (const landmarks of results.multiFaceLandmarks) {
 
             drawConnectors(
 
                 ctx1,
-
                 landmarks,
-
                 FACEMESH_TESSELATION,
 
                 {
 
-                    color:'cyan',
-                    lineWidth:1
+                    color: "cyan",
+                    lineWidth: 1
 
                 }
 
@@ -70,11 +81,11 @@ function onResults(results){
 
     }
 
-}
+});
 
 const camera = new Camera(video1, {
 
-    onFrame: async ()=>{
+    onFrame: async () => {
 
         await faceMesh.send({
 
@@ -84,16 +95,14 @@ const camera = new Camera(video1, {
 
     },
 
-    width:360,
-    height:260
+    width: 360,
+    height: 260
 
 });
 
 camera.start();
-const scanBtn = document.getElementById("scanBtn");
-const statusText = document.getElementById("status");
 
-scanBtn.addEventListener("click", ()=>{
+scanBtn.addEventListener("click", () => {
 
     statusText.innerText = "AI FACE DETECTED";
 
