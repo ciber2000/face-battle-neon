@@ -50,9 +50,9 @@ faceMesh.setOptions({
     minTrackingConfidence: 0.5
 
 });
-
+let faceMeshResults = null;
 faceMesh.onResults((results) => {
-
+faceMeshResults = results.multiFaceLandmarks;
     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
 
     if (results.multiFaceLandmarks) {
@@ -114,10 +114,38 @@ scanBtn.addEventListener("click", () => {
 
             clearInterval(interval);
 
-            const score = Math.floor(Math.random() * 100);
+const landmarks = faceMeshResults;
 
-            statusText.innerText =
-            `ЛИЦО ОБНАРУЖЕНО
+if (!landmarks || landmarks.length === 0) {
+
+    statusText.innerText = "ЛИЦО НЕ НАЙДЕНО";
+    return;
+
+}
+
+const face = landmarks[0];
+
+const leftEye = face[33];
+const rightEye = face[263];
+const nose = face[1];
+
+const eyeDistance = Math.abs(leftEye.x - rightEye.x);
+
+const symmetry =
+100 - Math.abs((leftEye.y - rightEye.y) * 100);
+
+let score = Math.floor(
+
+    (eyeDistance * 200) +
+    symmetry
+
+);
+
+if(score > 100) score = 100;
+if(score < 1) score = 1;
+
+statusText.innerText =
+`ЛИЦО ОБНАРУЖЕНО
 ПРИВЛЕКАТЕЛЬНОСТЬ: ${score}%`;
 
         }
