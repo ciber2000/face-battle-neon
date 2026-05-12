@@ -75,7 +75,27 @@ faceMesh.onResults((results) => {
                 }
 
             );
+const x = landmarks[234].x * canvas1.width;
 
+const y = landmarks[10].y * canvas1.height;
+
+const width =
+(landmarks[454].x - landmarks[234].x)
+* canvas1.width;
+
+const height =
+(landmarks[152].y - landmarks[10].y)
+* canvas1.height;
+
+ctx1.strokeStyle = "red";
+
+ctx1.lineWidth = 3;
+
+ctx1.shadowColor = "red";
+
+ctx1.shadowBlur = 20;
+
+ctx1.strokeRect(x, y, width, height);
         }
 
     }
