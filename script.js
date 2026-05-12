@@ -9,8 +9,10 @@ async function startCam(video){
     try{
 
         const stream = await navigator.mediaDevices.getUserMedia({
+
             video:true,
             audio:false
+
         });
 
         video.srcObject = stream;
@@ -26,38 +28,59 @@ async function startCam(video){
 startCam(video1);
 startCam(video2);
 
-scanBtn.addEventListener("click", ()=>{
+async function loadModels(){
+
+    await faceapi.nets.tinyFaceDetector.loadFromUri(
+        "https://cdn.jsdelivr.net/npm/face-api.js/weights"
+    );
+
+}
+
+loadModels();
+
+scanBtn.addEventListener("click", async ()=>{
 
     statusText.innerText = "SCANNING FACES...";
 
+    const face1 = await faceapi.detectSingleFace(
+        video1,
+        new faceapi.TinyFaceDetectorOptions()
+    );
+
+    const face2 = await faceapi.detectSingleFace(
+        video2,
+        new faceapi.TinyFaceDetectorOptions()
+    );
+
+    if(!face1 || !face2){
+
+        statusText.innerText =
+        "FACE NOT DETECTED";
+
+        return;
+
+    }
+
+    statusText.innerText =
+    "ANALYZING FACE STRUCTURE...";
+
     setTimeout(()=>{
 
-        statusText.innerText = "ANALYZING GENETICS...";
+        const score1 = Math.floor(Math.random()*100);
+        const score2 = Math.floor(Math.random()*100);
 
-    },1500);
-
-    setTimeout(()=>{
-
-        const p1 = Math.floor(Math.random()*100);
-        const p2 = Math.floor(Math.random()*100);
-
-        if(p1 > p2){
+        if(score1 > score2){
 
             statusText.innerText =
-            `WINNER: PLAYER 1\n${p1}% VS ${p2}%`;
-
-        }else if(p2 > p1){
-
-            statusText.innerText =
-            `WINNER: PLAYER 2\n${p2}% VS ${p1}%`;
+            `WINNER: PLAYER 1\n${score1}% VS ${score2}%`;
 
         }else{
 
             statusText.innerText =
-            `DRAW\n${p1}% VS ${p2}%`;
+            `WINNER: PLAYER 2\n${score2}% VS ${score1}%`;
 
         }
 
-    },3500);
+    },2000);
 
 });
