@@ -1,72 +1,92 @@
 const video1 = document.getElementById("video1");
-const video2 = document.getElementById("video2");
+const canvas1 = document.getElementById("canvas1");
 
-const statusText = document.getElementById("status");
-const scanBtn = document.getElementById("scanBtn");
+const ctx1 = canvas1.getContext("2d");
 
-async function startCam(video){
+async function startCam(){
 
-    try{
+    const stream = await navigator.mediaDevices.getUserMedia({
 
-        const stream = await navigator.mediaDevices.getUserMedia({
+        video:true
 
-            video:true,
-            audio:false
+    });
 
-        });
+    video1.srcObject = stream;
 
-        video.srcObject = stream;
+}
 
-    }catch(err){
+startCam();
 
-        alert("Camera access denied");
+const faceMesh = new FaceMesh({
+
+    locateFile: (file) => {
+
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+
+    }
+
+});
+
+faceMesh.setOptions({
+
+    maxNumFaces:1,
+
+    refineLandmarks:true,
+
+    minDetectionConfidence:0.5,
+
+    minTrackingConfidence:0.5
+
+});
+
+faceMesh.onResults(onResults);
+
+function onResults(results){
+
+    ctx1.clearRect(0,0,canvas1.width,canvas1.height);
+
+    if(results.multiFaceLandmarks){
+
+        for(const landmarks of results.multiFaceLandmarks){
+
+            drawConnectors(
+
+                ctx1,
+
+                landmarks,
+
+                FACEMESH_TESSELATION,
+
+                {
+
+                    color:'cyan',
+                    lineWidth:1
+
+                }
+
+            );
+
+        }
 
     }
 
 }
 
-startCam(video1);
-startCam(video2);
+const camera = new Camera(video1, {
 
-scanBtn.addEventListener("click", ()=>{
+    onFrame: async ()=>{
 
-    statusText.innerText = "SCANNING FACE...";
+        await faceMesh.send({
 
-    let progress = 0;
+            image: video1
 
-    const scanInterval = setInterval(()=>{
+        });
 
-        progress += 10;
+    },
 
-        statusText.innerText =
-        `AI SCANNING... ${progress}%`;
-
-        if(progress >= 100){
-
-            clearInterval(scanInterval);
-
-            const p1 = Math.floor(Math.random()*100);
-            const p2 = Math.floor(Math.random()*100);
-
-            if(p1 > p2){
-
-                statusText.innerText =
-                `WINNER: PLAYER 1\n${p1}% VS ${p2}%`;
-
-            }else if(p2 > p1){
-
-                statusText.innerText =
-                `WINNER: PLAYER 2\n${p2}% VS ${p1}%`;
-
-            }else{
-
-                statusText.innerText =
-                `DRAW\n${p1}% VS ${p2}%`;
-
-            }
-
-        }
-
-    },300);
+    width:360,
+    height:260
 
 });
+
+camera.start();
