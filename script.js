@@ -114,12 +114,37 @@ scanBtn.addEventListener("click", () => {
 
             clearInterval(interval);
 
-const landmarks = faceMeshResults;
+if(faceMeshResults){
 
-if (!landmarks || landmarks.length === 0) {
+    const face = faceMeshResults[0];
 
-    statusText.innerText = "ЛИЦО НЕ НАЙДЕНО";
-    return;
+    const leftEye = face[33];
+    const rightEye = face[263];
+
+    const eyeDistance =
+    Math.abs(leftEye.x - rightEye.x);
+
+    const symmetry =
+    100 - Math.abs(leftEye.y - rightEye.y) * 100;
+
+    let score = Math.floor(
+
+        (eyeDistance * 200) +
+        symmetry
+
+    );
+
+    if(score > 100) score = 100;
+    if(score < 1) score = 1;
+
+    statusText.innerText =
+    `ЛИЦО ОБНАРУЖЕНО
+ПРИВЛЕКАТЕЛЬНОСТЬ: ${score}%`;
+
+}else{
+
+    statusText.innerText =
+    "ЛИЦО НЕ ОБНАРУЖЕНО";
 
 }
 
