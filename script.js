@@ -118,24 +118,51 @@ scanBtn.addEventListener("click", () => {
 
         const face = faceMeshResults[0];
 
-        const leftEye = face[33];
-        const rightEye = face[263];
+const leftEye = face[33];
+const rightEye = face[263];
 
-        const eyeDistance =
-        Math.abs(leftEye.x - rightEye.x);
+const nose = face[1];
 
-        const symmetry =
-        100 - Math.abs(leftEye.y - rightEye.y) * 100;
+const leftCheek = face[234];
+const rightCheek = face[454];
 
-        let score = Math.floor(
+const chin = face[152];
 
-            (eyeDistance * 200) +
-            symmetry
+const eyeDistance =
+Math.abs(leftEye.x - rightEye.x);
 
-        );
+const faceWidth =
+Math.abs(leftCheek.x - rightCheek.x);
 
-        if(score > 100) score = 100;
-        if(score < 1) score = 1;
+const faceHeight =
+Math.abs(nose.y - chin.y);
+
+const symmetry =
+100 - Math.abs(leftEye.y - rightEye.y) * 100;
+
+const ratio =
+faceWidth / faceHeight;
+
+let score = 0;
+
+score += symmetry * 0.4;
+
+score += (eyeDistance * 100) * 0.3;
+
+if(ratio > 0.75 && ratio < 0.95){
+
+    score += 30;
+
+}else{
+
+    score += 10;
+
+}
+
+score = Math.floor(score);
+
+if(score > 100) score = 100;
+if(score < 1) score = 1;
 
         statusText.innerText =
         `AI ANALYSIS COMPLETE
