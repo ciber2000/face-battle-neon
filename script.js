@@ -24,7 +24,7 @@ async function startCamera() {
 
     } catch (err) {
 
-        alert("Camera access denied");
+        alert("Камера не разрешена");
 
     }
 
@@ -45,16 +45,13 @@ const faceMesh = new FaceMesh({
 faceMesh.setOptions({
 
     maxNumFaces: 1,
-
     refineLandmarks: true,
-
     minDetectionConfidence: 0.5,
-
     minTrackingConfidence: 0.5
 
 });
 
-faceMesh.onResults(results => {
+faceMesh.onResults((results) => {
 
     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
 
@@ -69,10 +66,8 @@ faceMesh.onResults(results => {
                 FACEMESH_TESSELATION,
 
                 {
-
                     color: "cyan",
                     lineWidth: 1
-
                 }
 
             );
@@ -104,6 +99,29 @@ camera.start();
 
 scanBtn.addEventListener("click", () => {
 
-    statusText.innerText = "AI FACE DETECTED";
+    let progress = 0;
+
+    statusText.innerText = "СКАНИРОВАНИЕ... 0%";
+
+    const interval = setInterval(() => {
+
+        progress += 10;
+
+        statusText.innerText =
+        `СКАНИРОВАНИЕ... ${progress}%`;
+
+        if (progress >= 100) {
+
+            clearInterval(interval);
+
+            const score = Math.floor(Math.random() * 100);
+
+            statusText.innerText =
+            `ЛИЦО ОБНАРУЖЕНО
+ПРИВЛЕКАТЕЛЬНОСТЬ: ${score}%`;
+
+        }
+
+    }, 300);
 
 });
