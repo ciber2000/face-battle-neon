@@ -9,6 +9,8 @@ const ctx1 = canvas1.getContext("2d");
 canvas1.width = 360;
 canvas1.height = 260;
 
+let faceMeshResults = null;
+
 async function startCamera() {
 
     try {
@@ -50,9 +52,11 @@ faceMesh.setOptions({
     minTrackingConfidence: 0.5
 
 });
-let faceMeshResults = null;
+
 faceMesh.onResults((results) => {
-faceMeshResults = results.multiFaceLandmarks;
+
+    faceMeshResults = results.multiFaceLandmarks;
+
     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
 
     if (results.multiFaceLandmarks) {
@@ -99,82 +103,45 @@ camera.start();
 
 scanBtn.addEventListener("click", () => {
 
-    let progress = 0;
+    statusText.innerText = "СКАНИРОВАНИЕ...";
 
-    statusText.innerText = "СКАНИРОВАНИЕ... 0%";
+    setTimeout(() => {
 
-    const interval = setInterval(() => {
+        if (!faceMeshResults || faceMeshResults.length === 0) {
 
-        progress += 10;
+            statusText.innerText =
+            "ПОДНЕСИ ЛИЦО К КАМЕРЕ";
 
-        statusText.innerText =
-        `СКАНИРОВАНИЕ... ${progress}%`;
-
-        if (progress >= 100) {
-
-            clearInterval(interval);
-
-if(faceMeshResults){
-
-    const face = faceMeshResults[0];
-
-    const leftEye = face[33];
-    const rightEye = face[263];
-
-    const eyeDistance =
-    Math.abs(leftEye.x - rightEye.x);
-
-    const symmetry =
-    100 - Math.abs(leftEye.y - rightEye.y) * 100;
-
-    let score = Math.floor(
-
-        (eyeDistance * 200) +
-        symmetry
-
-    );
-
-    if(score > 100) score = 100;
-    if(score < 1) score = 1;
-
-    statusText.innerText =
-    `ЛИЦО ОБНАРУЖЕНО
-ПРИВЛЕКАТЕЛЬНОСТЬ: ${score}%`;
-
-}else{
-
-    statusText.innerText =
-    "ЛИЦО НЕ ОБНАРУЖЕНО";
-
-}
-
-const face = landmarks[0];
-
-const leftEye = face[33];
-const rightEye = face[263];
-const nose = face[1];
-
-const eyeDistance = Math.abs(leftEye.x - rightEye.x);
-
-const symmetry =
-100 - Math.abs((leftEye.y - rightEye.y) * 100);
-
-let score = Math.floor(
-
-    (eyeDistance * 200) +
-    symmetry
-
-);
-
-if(score > 100) score = 100;
-if(score < 1) score = 1;
-
-statusText.innerText =
-`ЛИЦО ОБНАРУЖЕНО
-ПРИВЛЕКАТЕЛЬНОСТЬ: ${score}%`;
+            return;
 
         }
 
-    }, 300);
+        const face = faceMeshResults[0];
+
+        const leftEye = face[33];
+        const rightEye = face[263];
+
+        const eyeDistance =
+        Math.abs(leftEye.x - rightEye.x);
+
+        const symmetry =
+        100 - Math.abs(leftEye.y - rightEye.y) * 100;
+
+        let score = Math.floor(
+
+            (eyeDistance * 200) +
+            symmetry
+
+        );
+
+        if(score > 100) score = 100;
+        if(score < 1) score = 1;
+
+        statusText.innerText =
+        `AI ANALYSIS COMPLETE
+
+ПРИВЛЕКАТЕЛЬНОСТЬ: ${score}%`;
+
+    }, 2000);
 
 });
