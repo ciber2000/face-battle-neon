@@ -2,12 +2,13 @@ const video1 = document.getElementById("video1");
 const canvas1 = document.getElementById("canvas1");
 
 const scanBtn = document.getElementById("scanBtn");
-const statusText = document.getElementById("status");
+
 const score1Text =
 document.getElementById("score1");
 
 const score2Text =
 document.getElementById("score2");
+
 const ctx1 = canvas1.getContext("2d");
 
 canvas1.width = 360;
@@ -79,18 +80,6 @@ faceMesh.onResults((results) => {
                 }
 
             );
-const x = landmarks[234].x * canvas1.width;
-
-const y = landmarks[10].y * canvas1.height;
-
-const width =
-(landmarks[454].x - landmarks[234].x)
-* canvas1.width;
-
-const height =
-(landmarks[152].y - landmarks[10].y)
-* canvas1.height;
-
 
         }
 
@@ -119,14 +108,12 @@ camera.start();
 
 scanBtn.addEventListener("click", () => {
 
-    statusText.innerText = "СКАНИРОВАНИЕ...";
-
     setTimeout(() => {
 
         if (!faceMeshResults || faceMeshResults.length === 0) {
 
             score1Text.innerText =
-"SCORE: 0";
+            "SCORE: 0";
 
             return;
 
@@ -134,50 +121,58 @@ scanBtn.addEventListener("click", () => {
 
         const face = faceMeshResults[0];
 
-const leftEye = face[33];
-const rightEye = face[263];
+        const leftEye = face[33];
+        const rightEye = face[263];
 
-const nose = face[1];
+        const nose = face[1];
 
-const leftCheek = face[234];
-const rightCheek = face[454];
+        const leftCheek = face[234];
+        const rightCheek = face[454];
 
-const chin = face[152];
+        const chin = face[152];
 
-const eyeDistance =
-Math.abs(leftEye.x - rightEye.x);
+        const eyeDistance =
+        Math.abs(leftEye.x - rightEye.x);
 
-const faceWidth =
-Math.abs(leftCheek.x - rightCheek.x);
+        const faceWidth =
+        Math.abs(leftCheek.x - rightCheek.x);
 
-const faceHeight =
-Math.abs(nose.y - chin.y);
+        const faceHeight =
+        Math.abs(nose.y - chin.y);
 
-const symmetry =
-100 - Math.abs(leftEye.y - rightEye.y) * 100;
+        const symmetry =
+        100 - Math.abs(leftEye.y - rightEye.y) * 100;
 
-const ratio =
-faceWidth / faceHeight;
+        const ratio =
+        faceWidth / faceHeight;
 
-let score = 0;
+        let score = 0;
 
-score += symmetry * 0.4;
+        score += symmetry * 0.4;
 
-score += (eyeDistance * 100) * 0.3;
+        score += (eyeDistance * 100) * 0.3;
 
-if(ratio > 0.75 && ratio < 0.95){
+        if(ratio > 0.75 && ratio < 0.95){
 
-    score += 30;
+            score += 30;
 
-}else{
+        }else{
 
-    score += 10;
+            score += 10;
 
-}
+        }
 
-score1Text.innerText =
-`SCORE: ${score}`;
+        score = Math.floor(score);
 
-    }, 2000);
+        if(score > 100) score = 100;
+        if(score < 1) score = 1;
+
+        score1Text.innerText =
+        `SCORE: ${score}`;
+
+        score2Text.innerText =
+        `SCORE: ${Math.floor(Math.random()*100)}`;
+
+    }, 1500);
 
 });
